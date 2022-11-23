@@ -9,13 +9,23 @@ class OrdersModel {
   }
 
   public async getAllOrders(): Promise<Order[]> {
+    console.log('start');
     const result = await this.connection
       .execute(
-        `SELECT *
-        FROM Trybesmith.Orders
+        `SELECT orders.id, orders.userId,
+          JSON_ARRAYAGG(products.id) AS productsIds
+        FROM
+          Trybesmith.Orders AS orders
+        INNER JOIN
+          Trybesmith.Products AS products
+        ON
+          products.orderId = orders.id
+        GROUP BY
+          orders.id
       `,
       );
-
+      
+    console.log(result);
     const [rows] = result;
     return rows as Order[];
   }
