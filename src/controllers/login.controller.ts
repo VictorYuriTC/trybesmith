@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import LoginService from '../services/login.service';
 import generateNewJWT from '../jwt/generateToken';
+import * as messages from '../responses/messages';
 
 class LoginController {
   constructor(private loginService = new LoginService()) { }
@@ -9,11 +10,11 @@ class LoginController {
     const loginData = req.body;
 
     if (!loginData.username) {
-      return res.status(400).json({ message: '"username" is required' });
+      return res.status(400).json({ message: messages.getIsRequiredMsgByField('username') });
     }
   
     if (!loginData.password) {
-      return res.status(400).json({ message: '"password" is required' });
+      return res.status(400).json({ message: messages.getIsRequiredMsgByField('password') });
     }
 
     const loggedUser = await this.loginService.login(loginData);
