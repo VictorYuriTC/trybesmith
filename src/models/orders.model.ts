@@ -31,18 +31,25 @@ class OrdersModel {
   }
 
   public async addNewOrder(userId:number, productsIds: number[]): Promise<Order> {
-    const result = await this.connection
+    const addedOrderData = await this.connection
+      .execute<ResultSetHeader>(' INSERT INTO Trybesmith.Orders (userId) VALUES (?)', [userId]);
+
+    const [addedOrder] = addedOrderData;
+    const { insertId } = addedOrder;
+
+    const addedProductsPromises = productsIds.map((id) => this.connection
       .execute<ResultSetHeader>(
       `
-        INSERT INTO Trybesmith.Orders
-          (userId, productsIds)
-        VALUES
-          (?, ?)`,
-      [userId, productsIds],
-    );
+        UPDATE Trybesmith.Products
+        SET
+          orderId = ?
+        WHERE
+          id = ?
+      `,
+      [insertId, id],
+    ));
 
-    const [addedOrder] = result;
-    const { insertId } = addedOrder;
+    await Promise.all(addedProductsPromises);
 
     return { id: insertId, productsIds, userId };
   }

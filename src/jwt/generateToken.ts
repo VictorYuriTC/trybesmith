@@ -1,7 +1,7 @@
 import jwt, { Secret, SignOptions } from 'jsonwebtoken';
-import User from '../interfaces/user.interface';
+import Payload from '../interfaces/payload.interface';
 
-const generateNewJWT = (data: User | object) => {
+const generateNewJWT = (data: Payload) => {
   const jwtConfig = {
     expiresIn: '15d',
     algorithm: 'HS256',

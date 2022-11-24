@@ -23,7 +23,7 @@ class UsersModel {
     const [addedUser] = result;
     const { insertId } = addedUser;
 
-    return { id: insertId, ...newUser };
+    return { id: insertId, ...newUser } as User;
   }
 }
 

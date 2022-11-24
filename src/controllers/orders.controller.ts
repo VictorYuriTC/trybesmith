@@ -1,4 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import Payload from '../interfaces/payload.interface';
 import OrdersService from '../services/orders.service';
 
 class OrdersController {
@@ -13,15 +15,17 @@ class OrdersController {
   public addNewOrder = async (req: Request, res: Response, _next: NextFunction) => {
     const { productsIds } = req.body;
     const { authorization } = req.headers;
-    const userId = 10;
 
     if (!authorization) {
       return res.status(401).json({ message: 'Token not found' });
     }
+    
+    const decoded = jwt.decode(authorization) as Payload;
+    
+    const { id } = decoded;
+    await this.ordersService.addNewOrder(id, productsIds);
 
-    await this.ordersService.addNewOrder(userId, productsIds);
-
-    return res.status(201).json({ userId, productsIds });
+    return res.status(201).json({ userId: id, productsIds });
   };
 }
 

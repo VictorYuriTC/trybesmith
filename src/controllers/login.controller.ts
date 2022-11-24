@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import LoginService from '../services/login.service';
 import generateNewJWT from '../jwt/generateToken';
 import * as messages from '../responses/messages';
+import Payload from '../interfaces/payload.interface';
 
 class LoginController {
   constructor(private loginService = new LoginService()) { }
@@ -23,7 +24,7 @@ class LoginController {
       return res.status(401).json({ message: 'Username or password invalid' });
     }
 
-    const { id, username } = loggedUser;
+    const { id, username } = loggedUser as Payload;
 
     const token = generateNewJWT({ id, username });
 
