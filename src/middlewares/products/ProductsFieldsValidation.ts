@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import * as messages from '../../responses/messages';
 
-class FieldsValidation {
-  validateNameField = async (req: Request, res: Response, next: NextFunction) => {
+class ProductsFieldsValidation {
+  public validateNameField = async (req: Request, res: Response, next: NextFunction) => {
     const { name } = req.body;
     if (!name) {
       return res.status(400).json({ message: messages.getIsRequiredMsgByField('name') });
@@ -20,7 +20,7 @@ class FieldsValidation {
     next();
   };
 
-  validateAmountField = async (req: Request, res: Response, next: NextFunction) => {
+  public validateAmountField = async (req: Request, res: Response, next: NextFunction) => {
     const { amount } = req.body;
     if (!amount) {
       return res.status(400).json({ message: messages.getIsRequiredMsgByField('amount') });
@@ -39,4 +39,4 @@ class FieldsValidation {
   };
 }
 
-export default FieldsValidation;
+export default ProductsFieldsValidation;
