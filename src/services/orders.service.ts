@@ -14,6 +14,12 @@ class OrdersService {
 
     return allOrders;
   }
+
+  public async addNewOrder(userId: number, productsIds: number[]): Promise<Order> {
+    const addedOrder = await this.model.addNewOrder(userId, productsIds);
+
+    return addedOrder;
+  }
 }
 
 export default OrdersService;
